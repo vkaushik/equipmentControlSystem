@@ -1,0 +1,11 @@
+{
+  "numberOfFloors": 2,
+  "numberOfMainCorridorsPerFloor": 1,
+  "numberOfSubCorridorsPerFloor": 2,
+  "numberOfLightsPerMainCorridor": 1,
+  "numberOfLightsPerSubCorridor": 1,
+  "numberOfAirConditionersPerMainCorridor": 1,
+  "numberOfAirConditionersPerSubCorridor": 1,
+  "lightPower": 5,
+  "airConditionerPower": 10
+}
