@@ -1,0 +1,24 @@
+@startuml
+:**Command Parser**;
+note right
+Parse the commands and identify
+1. Which Sensor (sub-corridor)
+2. What Signal (movement detected)
+end note
+-> Ask correct Sensor 
+to send the Signal;
+:**Sensor**;
+-> Send Signal;
+:**Equipment Controller**;
+note right
+Manage power consumptions and 
+control the equipments
+end note
+-> Switch On/Off;
+:**Equipments**;
+note right
+Lights and AirConditioners
+end note
+
+center footer Flow diagram
+@enduml
