@@ -20,23 +20,32 @@ namespace EquipmentControlSystem.ControllerTest {
             log (JsonSerializer.Serialize<ControllerConfig> (config, options));
             log ("");
 
+            log ("Initial state:");
             equipmentController.LogStatus ();
 
             foreach (var command in commands) {
-                log ($"Input: { command }");
+                log ("---------------------------------------------------");
+                log ($"Input: {command}");
                 log ("");
-
-                (bool isValidCommand, Sensor sensor, Signal signal) =
-                Command.Parse (command, equipmentController);
-
-                if (isValidCommand) {
-                    sensor.send (signal);
-                } else {
-                    log ("Invalid command");
-                }
+                Process (command, equipmentController);
+                equipmentController.LogStatus ();
+                log ("");
             }
+
             log ($"******** end test #{serial} **********");
             log ("");
+            log ("---------------------------------------------------");
+        }
+
+        private void Process (string command, IEquipmentController equipmentController) {
+            (bool isValidCommand, Sensor sensor, Signal signal) =
+            Command.Parse (command, equipmentController);
+
+            if (isValidCommand) {
+                sensor.send (signal);
+            } else {
+                log ("Invalid command");
+            }
         }
 
         internal static Action<string> log = (string line) => {

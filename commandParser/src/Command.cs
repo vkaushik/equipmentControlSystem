@@ -11,12 +11,15 @@ namespace EquipmentControlSystem.CommandParser {
             string floorId = "";
             string subCorridorId = "";
             string sequenceId = "1";
+            SingalType type = SingalType.unknown;
 
             // Hard-coded rules to parse command.
             if (words.Length == 7 && command.Contains ("Movement")) {
+                type = SingalType.movement;
                 floorId = words[3][0].ToString ();
                 subCorridorId = words[6];
             } else if (words.Length == 11 & command.Contains ("No movement")) {
+                type = SingalType.noMovement;
                 floorId = words[4][0].ToString ();
                 subCorridorId = words[7];
             }
@@ -30,7 +33,7 @@ namespace EquipmentControlSystem.CommandParser {
                 return (false, sensor, signal);
             }
 
-            signal = new Signal (sensor, SingalType.movement);
+            signal = new Signal (sensor, type);
 
             return (true, sensor, signal);
         }
