@@ -14,7 +14,7 @@ namespace EquipmentControlSystem.Controller {
         private readonly HashSet<string> _activeSubCorridorIds = new HashSet<string> ();
         private readonly Dictionary<Sensor, EquipmentGroup> sensorToEquipments =
             new Dictionary<Sensor, EquipmentGroup> ();
-        public HashSet<Sensor> Sensors { get; }
+        private HashSet<Sensor> Sensors { get; }
 
         public EquipmentController (ControllerConfig config, Action<string> log) {
             this._config = config;
@@ -65,6 +65,15 @@ namespace EquipmentControlSystem.Controller {
                     equipment.switchOn ();
                 }
             }
+        }
+
+        public Sensor GetSensorById (EquipmentId sensorId) {
+            foreach (var sensor in Sensors) {
+                if (sensor.id.value == sensorId.value) {
+                    return sensor;
+                }
+            }
+            return null;
         }
 
         public void InstallMainCorridorEquipment (Equipment equipment) {
