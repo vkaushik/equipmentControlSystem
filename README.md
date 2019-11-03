@@ -121,31 +121,31 @@ Algorithm to handle event:
 
     On signal event
         if(eventType == movement)
-            allowedPowerConsumption
-            futurePowerConsumption
-            extraPowerConsumption = allowedPowerConsumption - futurePowerConsumption
-
+            get allowedPowerConsumption
+            get increasedPowerConsumption // when equipments will be switched on
+            extraPowerConsumption = allowedPowerConsumption - increasedPowerConsumption
             if(extraPowerConsumption > 0)
                 accomodateByDecreasingPower(extraPowerConsumption)
-                switch on equipments
+            switch on equipments
 
         else if (eventType == noMovement )
-            presentPowerConsumption
-            futurePowerConsumption
+            get presentPowerConsumption
+            get decreasedPowerConsumption // when equipments will be switched off
             changeInPowerConsumption = presentPowerConsumption - futurePowerConsumption
-
+            switch off equipments
             if(changeInPowerConsumption > 0)
-                switch off equipments
                 accomodateByIncreasingPower(changeInPowerConsumption)
 
 accomodate increased power consumption
     get switchedOnInactiveSubCorridorAirConditioners
     reducedPowerConsumption = 0
-    foreach(ac in switchedOnInactiveSubCorridorAirConditioners)
+    foreach(equipment in switchedOnInactiveSubCorridorAirConditioners)
         if (reducedPowerConsumption >= extraPowerConsumption) break
-        ac.switchOff()
-        reducedPowerConsumption += ac.power
-        equipmentsSwitchedOffToAdjustPowerConsumption.add(ac)
+        equipment.switchOff()
+        reducedPowerConsumption += equipment.power
+        equipmentsSwitchedOffToAdjustPowerConsumption.add(equipment)
+    if (reducedPowerConsumption < extraPowerConsumption)
+        log "Warning: could not accomodate the increased power."
 
 accomodate decreased power consumption
     increasedPowerConsumption = 0
