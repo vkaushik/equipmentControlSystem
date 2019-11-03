@@ -172,35 +172,10 @@ namespace EquipmentControlSystem.Controller {
 
         public void LogStatus () {
             var floorIds = new HashSet<string> ();
-            var floorIdToMainCorridorEquipmentStatus = new Dictionary<string, List<string>> ();
-            foreach (var equipment in _mainCorridorEquipments) {
-                var floorId = equipment.id.floorId;
-                if (!floorIdToMainCorridorEquipmentStatus.ContainsKey (floorId)) {
-                    floorIdToMainCorridorEquipmentStatus[floorId] = new List<string> ();
-                    floorIds.Add (floorId);
-                }
-                var corridorId = equipment.id.corridorId.Split (EquipmentId.idSeparator) [1];
-                var equipmentType = equipment.id.type.ToString ();
-                var sequenceNumber = equipment.id.sequenceId;
-                var equipmentStatus = equipment.isOn ? "ON" : "OFF";
-                var statusLine = $"Main corridor {corridorId} {equipmentType} {sequenceNumber} : {equipmentStatus}";
-                floorIdToMainCorridorEquipmentStatus[floorId].Add (statusLine);
-            }
-
-            var floorIdToSubCorridorEquipmentStatus = new Dictionary<string, List<string>> ();
-            foreach (var equipment in _subCorridorEquipments) {
-                var floorId = equipment.id.floorId;
-                if (!floorIdToSubCorridorEquipmentStatus.ContainsKey (floorId)) {
-                    floorIdToSubCorridorEquipmentStatus[floorId] = new List<string> ();
-                    floorIds.Add (floorId);
-                }
-                var corridorId = equipment.id.corridorId.Split (EquipmentId.idSeparator) [1];
-                var equipmentType = equipment.id.type.ToString ();
-                var sequenceNumber = equipment.id.sequenceId;
-                var equipmentStatus = equipment.isOn ? "ON" : "OFF";
-                var statusLine = $"Sub  corridor {corridorId} {equipmentType} {sequenceNumber} : {equipmentStatus}";
-                floorIdToSubCorridorEquipmentStatus[floorId].Add (statusLine);
-            }
+            var floorIdToMainCorridorEquipmentStatus = getEquipmentStatus (
+                "Main corridor", floorIds);
+            var floorIdToSubCorridorEquipmentStatus = getEquipmentStatus (
+                "Sub  corridor", floorIds);
 
             foreach (var floorId in floorIds) {
                 _log ($"Floor {floorId}");
@@ -218,6 +193,40 @@ namespace EquipmentControlSystem.Controller {
             }
         }
 
+        private Dictionary<string, List<string>> getEquipmentStatus (
+            string corridorType,
+            HashSet<string> floorIds) {
+            var floorIdToCorridorEquipmentStatus = new Dictionary<string, List<string>> ();
+            EquipmentGroup equipments;
+
+            if (corridorType == "Main corridor") {
+                equipments = _mainCorridorEquipments;
+            } else if (corridorType == "Sub  corridor") {
+                equipments = _subCorridorEquipments;
+            } else {
+                _log ("Unkown corridor");
+                return floorIdToCorridorEquipmentStatus;
+            }
+
+            foreach (var equipment in equipments) {
+                var floorId = equipment.id.floorId;
+                if (!floorIdToCorridorEquipmentStatus.ContainsKey (floorId)) {
+                    floorIdToCorridorEquipmentStatus[floorId] = new List<string> ();
+                    floorIds.Add (floorId);
+                }
+                var corridorId = equipment.id.corridorId.Split (EquipmentId.idSeparator) [1];
+                var equipmentType = equipment.id.type.ToString ();
+                if (equipment.id.type == EquipmentType.Light) {
+                    equipmentType = "         " + equipmentType;
+                }
+                var sequenceNumber = equipment.id.sequenceId;
+                var equipmentStatus = equipment.isOn ? "ON" : "OFF";
+                var statusLine = $"{corridorType} {corridorId} {equipmentType} {sequenceNumber} : {equipmentStatus}";
+                floorIdToCorridorEquipmentStatus[floorId].Add (statusLine);
+            }
+
+            return floorIdToCorridorEquipmentStatus;
+        }
         public virtual void Subscribe (IObservable<Signal> provider) {
             unsubscriber = provider.Subscribe (this);
         }
