@@ -1,9 +1,7 @@
 using System;
 
-namespace EquipmentControlSystem.Controller
-{
-    public class ControllerConfig
-    {
+namespace EquipmentControlSystem.Controller {
+    public class ControllerConfig {
         public int numberOfFloors { get; set; }
         public int numberOfMainCorridorsPerFloor { get; set; }
         public int numberOfSubCorridorsPerFloor { get; set; }
@@ -14,9 +12,9 @@ namespace EquipmentControlSystem.Controller
         public int lightPower { get; set; }
         public int airConditionerPower { get; set; }
 
-        public ControllerConfig() { }
+        public ControllerConfig () { }
 
-        public ControllerConfig(
+        public ControllerConfig (
             int numberOfFloors,
             int numberOfMainCorridorsPerFloor,
             int numberOfSubCorridorsPerFloor,
@@ -25,8 +23,7 @@ namespace EquipmentControlSystem.Controller
             int numberOfAirConditionersPerMainCorridor,
             int numberOfAirConditionersPerSubCorridor,
             int lightPower,
-            int airConditionerPower)
-        {
+            int airConditionerPower) {
             this.numberOfFloors = numberOfFloors;
             this.numberOfMainCorridorsPerFloor = numberOfMainCorridorsPerFloor;
             this.numberOfSubCorridorsPerFloor = numberOfSubCorridorsPerFloor;

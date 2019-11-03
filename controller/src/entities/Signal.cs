@@ -1,7 +1,7 @@
 using System;
 
 namespace EquipmentControlSystem.Controller {
-    public enum SingalType { movement, noMovement }
+    public enum SingalType { unknown, movement, noMovement }
     public class Signal {
         public SingalType type { get; }
         public Sensor source { get; }
